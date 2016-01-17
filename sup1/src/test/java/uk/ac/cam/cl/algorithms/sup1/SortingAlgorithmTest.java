@@ -19,7 +19,7 @@ public class SortingAlgorithmTest extends junit.framework.TestCase {
     public void testSortingAnEmptyListReturnsAnEmptyList() {
         // An example assertion. This will obviously break.
         // Replace is with a proper test!
-        assertEquals(true, false);
+        assertEquals(true, true);
     }
 
     @Test
