@@ -12,14 +12,34 @@ public class QueueTest extends junit.framework.TestCase {
 
     Queue queue;
 
-    @Test
-    public void emptyTest() {
+    public void assertQueueEmpty() {
+        try {
+            queue.pop();
+        } catch (QueueEmptyException e) {
+            return;
+        }
+        fail();
+    }
 
+    @Test
+    public void testPushPop() {
+        Integer a = 1;
+        Integer b = 2;
+        Integer c = 3;
+        queue.push(a);
+        queue.push(b);
+        assertEquals(queue.pop(), a);
+        assertEquals(queue.pop(), b);
+        assertQueueEmpty();
+        queue.push(c);
+        assertEquals(queue.pop(), c);
+        assertQueueEmpty();
     }
 
 
     public QueueTest(Queue queue) {
         this.queue = queue;
+        assertQueueEmpty();
     }
 
     @Parameterized.Parameters
