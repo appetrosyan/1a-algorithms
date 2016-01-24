@@ -23,7 +23,7 @@ public class MergeSort<T extends Comparable<? super T>> implements SortingAlgori
         } else {
             return merge (
                     sort(subList(arg,0,length/2)),
-                    sort(subList(arg,length/2,length))
+                    sort(subList(arg,length/2+1,length))
             );
         }
     }
