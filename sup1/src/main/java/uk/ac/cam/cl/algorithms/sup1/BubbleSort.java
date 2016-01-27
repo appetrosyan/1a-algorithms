@@ -38,10 +38,28 @@ public class BubbleSort<T extends Comparable<? super T>> implements SortingAlgor
                     }
                 }
                 length--;
+                swapped=false;
             }
             return result;
         }
 
+    }
+
+    public static void main(String[] args){
+        List <String> testArray = new ArrayList<String>();
+        List <String> result = new ArrayList<String>();
+        testArray.add("a");
+        testArray.add("d");
+        testArray.add("e");
+        testArray.add("b");
+        testArray.add("f");
+        testArray.add("c");
+
+        BubbleSort bs= new BubbleSort<String>();
+        result =bs.sort(testArray);
+        for(String x:result){
+            System.out.println(x);
+        }
     }
 
 }
