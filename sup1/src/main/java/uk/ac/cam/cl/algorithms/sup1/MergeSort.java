@@ -29,7 +29,7 @@ public class MergeSort<T extends Comparable<? super T>> implements SortingAlgori
     }
 
     private List<T> subList(List<T> superList,int iStart,int iEnd){
-        List<T> result = new java.util.ArrayList<>(iEnd-iStart);
+        List<T> result = new java.util.ArrayList<T>(iEnd-iStart);
         if(iEnd>superList.size() || iStart<0){
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -40,7 +40,7 @@ public class MergeSort<T extends Comparable<? super T>> implements SortingAlgori
     }
 
     private List<T> merge (List<T> left, List<T> right){
-        List<T> result = new java.util.ArrayList<> (left.size() + right.size());
+        List<T> result = new java.util.ArrayList<T>(left.size() + right.size());
         int i=0, lsz = left.size();
         int j=0, rsz = right.size();
 

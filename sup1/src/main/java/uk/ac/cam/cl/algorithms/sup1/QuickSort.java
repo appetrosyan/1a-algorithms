@@ -25,8 +25,8 @@ public class QuickSort<T extends Comparable<? super T>> implements SortingAlgori
     }
 
     private List<T> partition (List<T> list){
-        List<T> left= new java.util.ArrayList<>();
-        List<T> right= new java.util.ArrayList<>();
+        List<T> left= new java.util.ArrayList<T>();
+        List<T> right= new java.util.ArrayList<T>();
         List <T> result;
         if(null == list || list.isEmpty()){
             return list;

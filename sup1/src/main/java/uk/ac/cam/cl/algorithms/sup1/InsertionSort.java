@@ -17,7 +17,7 @@ public class InsertionSort<T extends Comparable<? super T>> implements SortingAl
             return arg;
             //Sorting an empty list is an empty list
         } else {
-            ArrayList<T> result=new ArrayList<>(arg.size());
+            ArrayList<T> result=new ArrayList<T>(arg.size());
             for(T element : arg) {
                 result.add(element);
             }//create local copy so as to sort non-destructively;

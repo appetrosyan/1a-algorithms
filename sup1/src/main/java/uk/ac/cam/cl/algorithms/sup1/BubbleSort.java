@@ -18,27 +18,28 @@ public class BubbleSort<T extends Comparable<? super T>> implements SortingAlgor
             return arg;
             //Sorting an empty list is an empty list
         } else {
-            ArrayList <T> result = new ArrayList<>(arg.size());
+            ArrayList <T> result = new ArrayList<T>(arg.size());
             for(T element :arg) {
                 result.add(element);
             }//create local copy so as to sort non-destructively;
 
             T buffer;
-            boolean swapped=false;
+            boolean haveSwapped=false;
 
-            while(!swapped && length > 0) {
+            while(length > 0) {
                 for(int i=1; i < length; i++) {
                     if(result.get(i-1).compareTo(result.get(i)) > 0) {
-                        //if(result.get(i-1)>result.get(i)) {
-                        //swap (result[i],result[i-1]);
                         buffer=result.get(i);
                         result.set(i, result.get(i-1));
                         result.set(i-1, buffer);
-                        swapped=true;
+                        haveSwapped = true;
                     }
                 }
-                length--;
-                swapped=false;
+                if(!haveSwapped){
+                    return result;
+                }else {
+                    length--;
+                }
             }
             return result;
         }
@@ -51,6 +52,11 @@ public class BubbleSort<T extends Comparable<? super T>> implements SortingAlgor
         testArray.add("a");
         testArray.add("d");
         testArray.add("e");
+        testArray.add("r");
+        testArray.add("q");
+        testArray.add("St. Albans");
+        testArray.add("killer");
+        testArray.add("Killer");
         testArray.add("b");
         testArray.add("f");
         testArray.add("c");
