@@ -8,8 +8,9 @@ import java.lang.Math;
 
 public class HeapSort<T extends Comparable<? super T>> implements SortingAlgorithm<T> {
     /**
-     * Creates a copy of the original list and sorts it in n (Log n) time using Hcreates a max heap from the given array in place. From rootIndex to endIndex.
-     * The 0-th element is the root of the binary tree.eapsort algorithm.
+     * Creates a copy of the original list and sorts it in n (Log n) time using Hcreates
+     * a max heap from the given array in place. From rootIndex to endIndex.
+     * The 0-th element is the root of the binary tree.
      *
      * @param input - the list to be sorted.
      * @return a sorted copy of the initial List.
