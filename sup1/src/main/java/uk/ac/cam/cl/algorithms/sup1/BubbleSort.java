@@ -16,7 +16,7 @@ public class BubbleSort<T extends Comparable> implements SortingAlgorithm<T> {
     POSTCONDITION: List contains the same values as before sorted in ascending
     order according to comparable
     */
-        if (input.isEmpty()) return input;
+        if (input.size() == 0) return input;
         boolean didSomeSwapsInThisPass = true;
         while(didSomeSwapsInThisPass){
             didSomeSwapsInThisPass = false;

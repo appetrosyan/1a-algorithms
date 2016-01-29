@@ -22,7 +22,7 @@ public class SortingAlgorithmTest extends junit.framework.TestCase {
         ArrayList<Integer> outputList = new ArrayList<Integer>(sortingAlgorithm.sort(inputList));
 
         assertEquals(inputList.isEmpty(), true);
-        assertEquals(outputList.isEmpty(), false);
+        assertEquals(outputList.isEmpty(), true);
     }
 
     @Test

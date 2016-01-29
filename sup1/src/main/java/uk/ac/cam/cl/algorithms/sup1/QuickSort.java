@@ -9,7 +9,7 @@ public class QuickSort<T extends Comparable> implements SortingAlgorithm<T> {
 
 
     public List<T> sort(List<T> input) {
-        if (input.isEmpty()) return input;
+        if (input.size() == 0) return input;
         return quicksort(input, 0, input.size());
     }
     private List<T> quicksort(List<T> input, int iBegin, int iEnd){
