@@ -1,5 +1,5 @@
 [gerrit]
 host=algorithms.dtg.cl.cam.ac.uk
 port=29418
-project=algorithms
-defaultbranch=your-crsid-here
+project=1a-algorithms
+defaultbranch=de300
