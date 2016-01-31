@@ -77,7 +77,6 @@ public class MaxHeap implements MaxHeapInterface {
         return (int) Math.floor(i/2);
     }
 
-
     /**
      * Returns the index of the element's left child
      * @param i

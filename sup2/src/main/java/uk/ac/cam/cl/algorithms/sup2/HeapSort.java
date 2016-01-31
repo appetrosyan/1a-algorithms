@@ -77,15 +77,15 @@ public class HeapSort<T extends Comparable<? super T>> implements SortingAlgorit
     /**
      Following functions provided for readability
      */
-    private int parent(int i){
+    private static final int parent(int i){
         return Math.floorDiv(i,2);
     }
 
-    private int left (int i){
+    private static final int left (int i){
         return 2*i+1;
     }
 
-    private int right (int i){
+    private static final int right (int i){
         return 2*i+2;
     }
 
