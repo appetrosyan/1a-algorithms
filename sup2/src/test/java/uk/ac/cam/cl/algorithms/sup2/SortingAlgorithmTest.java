@@ -93,7 +93,6 @@ public class SortingAlgorithmTest extends junit.framework.TestCase {
                 new SortingAlgorithm[]{new HeapSort<Integer>()}
         );
 
-        // TODO: What else do we need to test?
     }
 
 }

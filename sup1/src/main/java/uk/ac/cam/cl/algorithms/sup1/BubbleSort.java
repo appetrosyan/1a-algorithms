@@ -16,56 +16,26 @@ public class BubbleSort<T extends Comparable<? super T>> implements SortingAlgor
         int length=arg.size();
         if(length<=1) {
             return arg;
-            //Sorting an empty list is an empty list
+            //Sorting a list of just one element (or an empty list is the list itself
         } else {
-            ArrayList <T> result = new ArrayList<T>(arg.size());
-            for(T element :arg) {
-                result.add(element);
-            }//create local copy so as to sort non-destructively;
-
-            T buffer;
             boolean haveSwapped=false;
-
             while(length > 0) {
                 for(int i=1; i < length; i++) {
-                    if(result.get(i-1).compareTo(result.get(i)) > 0) {
-                        buffer=result.get(i);
-                        result.set(i, result.get(i-1));
-                        result.set(i-1, buffer);
+                    if(arg.get(i-1).compareTo(arg.get(i)) > 0) {
+                        Collections.swap(arg,i-1,i);
                         haveSwapped = true;
                     }
                 }
                 if(!haveSwapped){
-                    return result;
+                    return arg;
                 }else {
                     length--;
                 }
             }
-            return result;
         }
+        return arg;
 
     }
 
-    public static void main(String[] args){
-        List <String> testArray = new ArrayList<String>();
-        List <String> result = new ArrayList<String>();
-        testArray.add("a");
-        testArray.add("d");
-        testArray.add("e");
-        testArray.add("r");
-        testArray.add("q");
-        testArray.add("St. Albans");
-        testArray.add("killer");
-        testArray.add("Killer");
-        testArray.add("b");
-        testArray.add("f");
-        testArray.add("c");
-
-        BubbleSort bs= new BubbleSort<String>();
-        result =bs.sort(testArray);
-        for(String x:result){
-            System.out.println(x);
-        }
-    }
 
 }

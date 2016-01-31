@@ -1,6 +1,7 @@
 package uk.ac.cam.cl.algorithms.sup1;
 
-import java.util.*;
+import java.util.List;
+
 
 
 /**
@@ -22,22 +23,13 @@ public class MergeSort<T extends Comparable<? super T>> implements SortingAlgori
             //a singleton sorts to a singleton.
         } else {
             return merge (
-                    sort(subList(arg,0,length/2)),
-                    sort(subList(arg,length/2+1,length))
+                    sort(arg.subList(0,length/2)),
+                    sort(arg.subList(length/2+1,length))
             );
         }
     }
 
-    private List<T> subList(List<T> superList,int iStart,int iEnd){
-        List<T> result = new java.util.ArrayList<T>(iEnd-iStart);
-        if(iEnd>superList.size() || iStart<0){
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        for(int i=iStart; i < iEnd; i++) {
-            result.add(superList.get(i));
-        }
-        return result;
-    }
+
 
     private List<T> merge (List<T> left, List<T> right){
         List<T> result = new java.util.ArrayList<T>(left.size() + right.size());

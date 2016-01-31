@@ -3,8 +3,8 @@ package uk.ac.cam.cl.algorithms.sup2;
 import uk.ac.cam.cl.algorithms.sup1.SortingAlgorithm;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.lang.Math;
+import java.util.Collections;
 
 public class HeapSort<T extends Comparable<? super T>> implements SortingAlgorithm<T> {
     /**
@@ -16,33 +16,19 @@ public class HeapSort<T extends Comparable<? super T>> implements SortingAlgorit
      * @return a sorted copy of the initial List.
      */
     public List<T> sort(List<T> input) {
-        List<T> result = new ArrayList(input.size());
-        result.addAll(input); //Make local copy
-        int last = result.size();
-        buildMaxHeap (result,last);
+        int last = input.size();
+        buildMaxHeap (input,last);
         if (input.isEmpty() || input.size() <= 1) {
-            return result;
+            return input;
         } else {
-            //buildMaxHeap(result,result.size());
+            //buildMaxHeap(input,result.size());
             while (last > 0) {
-                swap(result, 0, last-1);
+                Collections.swap(input, 0, last-1);
                 last--;
-                maxHeapify(result,0, last);
+                maxHeapify(input,0, last);
             }
         }
-        return result;
-    }
-
-    /** * swaps the two elements at index a and index b values in the given list. *
-     *
-     * @param input
-     * @param a
-     * @param b
-     */
-    private void swap (List <T> input, int a, int b){
-        T buffer = input.get(a);
-        input.set(a, input.get(b));
-        input.set(b, buffer);
+        return input;
     }
 
     /**
@@ -66,7 +52,7 @@ public class HeapSort<T extends Comparable<? super T>> implements SortingAlgorit
             iOfLargest = r;
         }
         if (iOfLargest!= rootIndex) {
-            swap(heap, rootIndex, iOfLargest);
+            Collections.swap(heap, rootIndex, iOfLargest);
             maxHeapify(heap, iOfLargest, heapSize);
         }
 
@@ -103,20 +89,5 @@ public class HeapSort<T extends Comparable<? super T>> implements SortingAlgorit
         return 2*i+2;
     }
 
-    /**
-     * Main method to test the program, aside from the JUnit Tests.
-     * @param args
-     */
-    public static void main(String args[]){
-        List <Integer>  i = new ArrayList<Integer>();
-        java.util.Random rGen = new java.util.Random();
-        for(int j=0;j<10 ;j++){
-            i.add(rGen.nextInt(9));
-        }
-        HeapSort<Integer> hs = new HeapSort<Integer>();
-        List<Integer> o = hs.sort(i);
-        for (Integer element : o) {
-            System.out.print(element+" ");
-        }
-    }
+
 }

@@ -1,6 +1,7 @@
 package uk.ac.cam.cl.algorithms.sup1;
 
-import java.util.*;
+import java.util.List;
+import java.util.Collections;
 
 /**
  * Created by oliverchick on 24/12/2015.
@@ -9,46 +10,51 @@ import java.util.*;
  */
 public class QuickSort<T extends Comparable<? super T>> implements SortingAlgorithm<T> {
 
-    /*
-     * Implement quick sort here
-     */
     public List<T> sort(List<T> arg) {
-        int length=arg.size();
-        if(length <= 1) {
-            return arg;
-            //Sorting an empty list is an empty list,
-            //a singleton sorts to a singleton.
-        } else {
+        quickSort(arg, 0, arg.size());
+        return arg;
+    }
 
-            return partition(arg);
+    /**
+     * PErforms Quicksort on the given list in place, between indices s and e
+     * @param list
+     * @param start
+     * @param end
+     */
+    private void quickSort (List<T> list, int start, int end){
+        if(end-start<=1 || end>list.size()){
+            return;
+        }
+        else{
+            int pivotIndex = partition (list,start,end);
+            quickSort(list,start,pivotIndex);
+            quickSort(list,pivotIndex+1,end);
         }
     }
 
-    private List<T> partition (List<T> list){
-        List<T> left= new java.util.ArrayList<T>();
-        List<T> right= new java.util.ArrayList<T>();
-        List <T> result;
-        if(null == list || list.isEmpty()){
-            return list;
-        }
-        int length = list.size();
-        T pivot = list.get(length);
-        for(int i=0; i < length-1; i++) {
-            //Iterate through the whole list and partition elements accordingly;
-            if(list.get(i).compareTo(pivot) <= 0) {
-                left.add(list.get(i));
-            } else {
-                right.add(list.get(i));
+    /**
+     * partitions the input list into section all smaller han the pivot, the pivot itself, and the
+     * section greater than the pivot. This opertaion is done on a segment of the list between start and end.
+     * @param input
+     * @param start
+     * @param end
+     * @return Index of the pivot element.
+     */
+    private int partition(List<T> input, int start, int end){
+        T pivotElement = input.get(end-1);
+        int pivotIndex = start;
+
+        for(int i=start; i <end -1;i++){
+            if(pivotElement.compareTo(input.get(i))>=0){
+                Collections.swap(input,pivotIndex,i);
+                pivotIndex++;
             }
         }
-        //Add pivot to the middle
-        left.add(pivot);
-        //sort left
-        result = sort(left);
-        //append sorted right
-        result.addAll(sort(right));
-        return result;
 
+        Collections.swap(input,pivotIndex, end-1);
+        return pivotIndex;
 
     }
+
+
 }
