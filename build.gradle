@@ -11,3 +11,8 @@ subprojects {
     testCompile group: 'junit', name: 'junit', version: '4.+'
   }
 }
+project(':sup2') {
+  dependencies {
+    compile project(':sup1')
+  }
+}
