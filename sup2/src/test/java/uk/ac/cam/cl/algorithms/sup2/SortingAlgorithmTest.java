@@ -9,9 +9,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class SortingAlgorithmTest extends junit.framework.TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class SortingAlgorithmTest {
     /**
-     * Test clas to implement the unit Tests.
+     * Test class to implement the unit Tests.
      * collection
      * created by oc243. modified by ap886 on Jan 28 2016
      */
@@ -20,32 +22,32 @@ public class SortingAlgorithmTest extends junit.framework.TestCase {
 
     @Test
     public void testSortingAnEmptyListReturnsAnEmptyList() {
-        ArrayList<Integer> input1 = new ArrayList<Integer>();
+        ArrayList<Integer> input1 = new ArrayList<>();
         ArrayList<Integer> input2 = null;
 
-        assertEquals(input1, sortingAlgorithm.sort(input1));
-        assertEquals(input2, sortingAlgorithm.sort(input2));
+        assertEquals(sortingAlgorithm.sort(input1), input1);
+        assertEquals(sortingAlgorithm.sort(input2), input2);
     }
 
 
     @Test
     public void testSortingAOneElementListReturnsCopyOfTheOriginalList() {
-        ArrayList<Integer> list1 = new ArrayList<Integer>();
+        ArrayList<Integer> list1 = new ArrayList<>();
         java.util.Random randomGenerator = new java.util.Random();
-        list1.add(new Integer(randomGenerator.nextInt()));
-        ArrayList<Integer> list2 = new ArrayList<Integer>(sortingAlgorithm.sort(list1));
+        list1.add(randomGenerator.nextInt());
+        ArrayList<Integer> list2 = new ArrayList<>(sortingAlgorithm.sort(list1));
         assertEquals(list1, list2);
     }
 
     @Test
     public void testSortingAListReturrnsSortedList() {
-        List<Integer> input = new ArrayList<Integer>();
+        List<Integer> input = new ArrayList<>();
         java.util.Random rGen = new java.util.Random();
         int howMany = rGen.nextInt();
         for (int j = 0; j < howMany; j++) {
             input.add(rGen.nextInt());
         }
-        HeapSort<Integer> hs = new HeapSort<Integer>();
+        HeapSort<Integer> hs = new HeapSort<>();
         List<Integer> output = hs.sort(input);
 
         assertEquals(isSorted(output), true);
@@ -64,9 +66,7 @@ public class SortingAlgorithmTest extends junit.framework.TestCase {
 
     private boolean isSortedDescending(List<? extends Comparable> input) {
         for (int i = 0; i < input.size() - 1; i++) {
-            if (input.get(i).compareTo(input.get(i + 1)) > 0) {
-                return false;
-            }
+            if (input.get(i).compareTo(input.get(i + 1)) > 0) return false;
         }
         return true;
 
@@ -74,9 +74,7 @@ public class SortingAlgorithmTest extends junit.framework.TestCase {
 
     private boolean isSortedAscending(List<? extends Comparable> input) {
         for (int i = 0; i < input.size() - 1; i++) {
-            if (input.get(i).compareTo(input.get(i + 1)) < 0) {
-                return false;
-            }
+            if (input.get(i).compareTo(input.get(i + 1)) < 0) return false;
         }
         return true;
     }
