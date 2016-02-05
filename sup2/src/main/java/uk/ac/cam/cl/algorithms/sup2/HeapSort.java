@@ -3,7 +3,6 @@ package uk.ac.cam.cl.algorithms.sup2;
 import uk.ac.cam.cl.algorithms.sup1.SortingAlgorithm;
 
 import java.util.List;
-import java.util.ArrayList;
 
 public class HeapSort<T extends Comparable> implements SortingAlgorithm<T> {
 
@@ -14,18 +13,13 @@ public class HeapSort<T extends Comparable> implements SortingAlgorithm<T> {
         heap = input;
         maxCharHeap(input);
 
-        //since calling getMax repeatedly ends up actually sorting the list there is no need for a new list
         while (getLength() > 0) {
-            try {
-                getMax();
-            } catch (EmptyHeapException e) {
-                break;
-            }
+            swapMax();
         }
         return heap;
     }
 
-    public void maxCharHeap(List<T> s) {
+    private void maxCharHeap(List<T> s) {
         int END = s.size();
         end = END - 1;
 
@@ -36,28 +30,38 @@ public class HeapSort<T extends Comparable> implements SortingAlgorithm<T> {
 
     private void heapify(int iRoot) {
         int j;
-        if ((2*iRoot) + 1 > end) {
+        int leftPointer = (2*iRoot) + 1;
+        int rightPointer = (2*iRoot) + 2;
+
+        if (leftPointer > end) {
             return;
-        } else if ((2*iRoot) + 2 > end) {
-            if (heap.get(iRoot).compareTo(heap.get((2*iRoot) + 1)) > 0) {
+        } else if (rightPointer > end) {
+            if (greaterThan(iRoot, leftPointer)) {
                 return;
             } else {
-                j = (2*iRoot) + 1;
+                j = leftPointer;
             }
         } else {
-            if (heap.get(iRoot).compareTo(heap.get((2*iRoot) + 1)) > 0 &&
-                    heap.get(iRoot).compareTo(heap.get((2*iRoot) + 2)) > 0) {
+            if (greaterThan(iRoot, leftPointer) && greaterThan(iRoot, rightPointer)) {
                 return;
             }
-            else if (heap.get((2*iRoot) + 1).compareTo(heap.get((2*iRoot) + 2)) > 0) {
-                j = (2*iRoot) + 1;
+            else if (greaterThan(leftPointer, rightPointer)) {
+                j = leftPointer;
             }
             else {
-                j = (2*iRoot) + 2;
+                j = rightPointer;
             }
         }
         swap(iRoot, j);
         heapify(j);
+    }
+
+    private boolean greaterThan(int i1, int i2) {
+        if (heap.get(i1).compareTo(heap.get(i2)) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void swap(int p1, int p2) {
@@ -66,27 +70,14 @@ public class HeapSort<T extends Comparable> implements SortingAlgorithm<T> {
         heap.set(p2, temp);
     }
 
-    public T getMax() throws EmptyHeapException {
-        T res;
-        if (end < 0) {
-            throw new EmptyHeapException();
-        }
-
-        try {
-            res = heap.get(0);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            throw new EmptyHeapException();
-        }
-
+    private void swapMax() {
         swap(0,end);
         end --;
         heapify(0);
-
-        return res;
+        return;
     }
 
-    public int getLength() {
+    private int getLength() {
         return end + 1;
     }
 
