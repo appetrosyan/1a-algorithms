@@ -5,14 +5,12 @@ import java.util.LinkedList;
 
 /**
  * Created by oliverchick on 2016-02-01.
- * <p/>
+ * 
  * Modified by ap886 at Feb 3 2016
  */
 public class Benchmark {
-
     private static long timeWhenCreated;
     private static long timeWhenTerminated;
-
 
     /**
      * Calculated the time taken to create a linked list with n items and then
@@ -40,7 +38,7 @@ public class Benchmark {
     /**
      * Showcases the difference between different types of list treatment.
      *
-     * @param numItems
+     * @param numItems number of items in Lists. 
      * @return
      */
     public static int benchmarkListSmart(int numItems) {

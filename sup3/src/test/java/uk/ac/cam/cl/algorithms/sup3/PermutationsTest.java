@@ -36,7 +36,7 @@ public class PermutationsTest {
     @Test
     public void testStringsSameLength(){
         assertEquals(Permutations.arePermuations("hellman","lehlnam"),true);
-        assertEquals(Permutations.arePermuations("LoremIpsumDolorSitAmet","IpsumDolorAmetSitLorem"),true);
+        assertEquals(Permutations.arePermuations("Lorem Ipsum Dolor Sit Amet","Ipsum Dolor Amet Sit Lorem"),true);
     }
 
     // Testing a static method, so nothing to do here.
