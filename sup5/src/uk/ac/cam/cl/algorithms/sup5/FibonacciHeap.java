@@ -13,7 +13,7 @@ public interface FibonacciHeap <T> {
      * Non-destructively retrieve the minimum value in the Fibonacci Heap.
      * @return The  minimum value in the FibHeap
      */
-    T getMin ();
+    FibonacciNode<T> getMin ();
 
     /**
      * To be done by ***
@@ -25,7 +25,7 @@ public interface FibonacciHeap <T> {
 
     /**
      * Should Perform the merge of the two fibHeaps. By reducing the amount of binomial trees in the \
-     * heap to one tree per type.
+     * heap to one tree per degree.
      *
      * @param a heap to be merged into
      * @param b heap to be merged with
@@ -37,7 +37,7 @@ public interface FibonacciHeap <T> {
     /**
      * To be Done by ***
      *
-     * Destructively retrieve the minimum value in the Fibonacci heap. Perfroming the Tidy-Up procedure.
+     * Destructively retrieve the minimum value in the Fibonacci heap. Performing the Tidy-Up procedure.
      * @return The minimum value that is no longer in the heap.
      */
     T extractMin();
@@ -48,11 +48,12 @@ public interface FibonacciHeap <T> {
      * @param priority the new priority of the element (prefereably the priority should only be decreased,
      *
      */
-    void decreaseKey (T element, int priority);
+    void decreaseKey (FibonacciNode<T> element, int priority) throws TriedToIncreaseKeyException;
 
     /**
      * Highly optional. Wrap to decrease key to minus infinity and extract min.
+     * @
      * @param element
      */
-    void delete (T element);
+    void delete(FibonacciNode<T> element);
 }

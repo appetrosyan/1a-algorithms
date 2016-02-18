@@ -1,5 +1,9 @@
 package uk.ac.cam.cl.algorithms.sup5;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+
 /**
  * Created by app on 17/02/16.
  * <p>
@@ -7,7 +11,13 @@ package uk.ac.cam.cl.algorithms.sup5;
  */
 public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
 
+    List<FibonacciNode<T>> roots = new ArrayList<>(); //TODO reimplement this in pointers
+    FibonacciNode<T> minRoot;
+    int nodes = 0;  //TODO replace with roots.getSize()
+
     //TODO redistribute work.
+
+
 
     /**
      * To be Done By ***
@@ -17,9 +27,8 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
      * @return The  minimum value in the FibHeap
      */
     @Override
-    public T getMin() {
-        //TODO
-        return null;
+    public FibonacciNode<T> getMin() {
+        return minRoot;
     }
 
     /**
@@ -31,8 +40,7 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
      */
     @Override
     public void insert(T newValue) {
-        //TODO
-
+            //TODO
     }
 
     /**
@@ -50,6 +58,8 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
         //TODO implement this.
     }
 
+    //-------------------------------------------------------------------------------------------------
+
     /**
      * To be Done by ***
      * <p>
@@ -59,9 +69,67 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
      */
     @Override
     public T extractMin() {
-        //TODO
-        return null;
+        if(this.minRoot != null){
+            for(FibonacciNode<T> x : minRoot.getChildren()){ //TODO implement iterator
+                roots.add(x);
+                x.setParent(null);
+            }
+            if(roots.size() == 1){//E.g. completely traversed the cycle.
+                minRoot = null;
+            }else{
+                minRoot = minRoot.getRight();//TODO find new Min inside Consolidate()
+                nodes--;
+            }
+            T result = minRoot.getPayload();
+            return result;
+        }else{
+            return null;
+        }
+
     }
+
+    /**
+     * Perform Consolidate as specified in the CLRS. page 516
+     */
+    private void consolidate () {
+        ArrayList<FibonacciNode<T>> array = new ArrayList<>(getMaxDegree());
+        for (FibonacciNode<T> x : roots) {
+            int d = x.getDegree();
+            while(array.get(d)!=null){
+                FibonacciNode y = array.get(d);
+                if(x.getKey() > y.getKey()){
+                    Collections.swap(
+                            roots, roots.indexOf(x), roots.indexOf(y)
+                    );
+                    roots.remove(y);
+                    x.addChild(y);
+                    y.setMarked(false);
+                    array.set(d, null);
+                    d++;
+                }
+                array.set(d,x);
+                minRoot = null;
+            }
+        }
+        for (int i = 0; i < getMaxDegree(); i++) {
+            if(array.get(i)!=null){
+                if(minRoot==null){
+                    roots = new ArrayList<> ();
+                    roots.add(array.get(i));
+                }else{
+                    roots.add(array.get(i));
+                    if(array.get(i).getKey() < minRoot.getKey()){
+                        minRoot = array.get(i);
+                    }
+                }
+            }
+        }
+    }
+
+    private int getMaxDegree() {
+        return nodes;//TODO calculate a tighter upper bound
+    }
+
 
     /**
      * Increase the priority of the element of the heap by reference.
@@ -70,8 +138,36 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
      * @param priority the new priority of the element (prefereably the priority should only be decreased,
      */
     @Override
-    public void decreaseKey(T element, int priority) {
-        //TODO
+    public void decreaseKey(FibonacciNode<T> element, int priority) throws TriedToIncreaseKeyException {
+        if(priority > element.getKey()){
+            throw new TriedToIncreaseKeyException(priority, element.getKey());
+        }
+        element.setKey(priority);
+        FibonacciNode <T> parent = element.getParent();
+        if(parent !=null && element.getKey()<parent.getKey()){
+            cut(element,parent);
+            cascadingCut(parent);
+        }if(element.getKey() < getMin().getKey()){
+            minRoot = element;
+        }
+    }
+
+    public void cut(FibonacciNode son, FibonacciNode dad){
+        dad.removeFromChildren(son);
+        dad.decrementDegree();
+        roots.add(son);
+        son.setMarked(false);
+    }
+
+    public void cascadingCut(FibonacciNode<T> parent){
+        FibonacciNode<T> grandParent = parent.getParent();
+        if(grandParent!=null){
+            if(!parent.isMarked()) parent.setMarked(true);
+            else{
+                cut(parent,grandParent);
+                cascadingCut(grandParent);
+            }
+        }//else do nothing, the root node cannot be cut even if it's marked.
     }
 
     /**
@@ -80,8 +176,12 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
      * @param element
      */
     @Override
-    public void delete(T element) {
-
-        //TODO
+    public void delete(FibonacciNode<T> element)  {
+        try {
+            decreaseKey(element, 1<<31); //Assuem we're dealing with a two's complement, make very negative
+        }catch (TriedToIncreaseKeyException error){
+            error.printStackTrace();
+        }
+        extractMin();
     }
 }
