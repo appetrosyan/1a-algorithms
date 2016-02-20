@@ -1,6 +1,6 @@
 package uk.ac.cam.cl.algorithms.sup5;
 
-import java.util.List;
+import java.util.Iterator;
 
 /**
  * Created by app on 18/02/16.
@@ -8,25 +8,6 @@ import java.util.List;
  * Project ${PROJECT-NAME}
  */
 public class LinkListNode<T> implements FibonacciNode<T>{
-
-    public LinkListNode (T newValue){
-        //TODO implement this
-    }
-
-    @Override
-    public void addChild(FibonacciNode<T> newChild) {
-        //TODO
-    }
-
-    @Override
-    public void addSibling(FibonacciNode<T> brother) {
-        //TODO
-    }
-
-    @Override
-    public void setParent(FibonacciNode<T> newParent) {
-        //TODO
-    }
 
     @Override
     public FibonacciNode<T> getRight() {
@@ -41,32 +22,21 @@ public class LinkListNode<T> implements FibonacciNode<T>{
     }
 
     @Override
-    public FibonacciNode<T> getParent(){
-     //TODO
-        return null;
-    }
-
-    @Override
-    public FibonacciNode<T> getChild(){
+    public FibonacciNode<T> getParent() {
         //TODO
         return null;
     }
 
     @Override
-    public int getKey() {
+    public FibonacciNode<T> getChild() {
         //TODO
-        return 0;
+        return null;
     }
 
     @Override
-    public void setKey(int newKey){
+    public T getPayload() {
         //TODO
-    }
-
-    @Override
-    public boolean isMarked() {
-        //TODO
-        return false;
+        return null;
     }
 
     @Override
@@ -76,12 +46,25 @@ public class LinkListNode<T> implements FibonacciNode<T>{
     }
 
     @Override
-    public void incrementDegree() {
+    public int getNumberOfSiblings() {
         //TODO
+        return 0;
     }
 
     @Override
-    public void decrementDegree() {
+    public int getKey() {
+        //TODO
+        return 0;
+    }
+
+    @Override
+    public boolean isMarked() {
+        //TODO
+        return false;
+    }
+
+    @Override
+    public void setParent(FibonacciNode<T> newParent) {
         //TODO
     }
 
@@ -91,31 +74,93 @@ public class LinkListNode<T> implements FibonacciNode<T>{
     }
 
     @Override
-    public T getPayload() {
+    public void incrementDegree() {
         //TODO
-        return null;
+    }
+
+    @Override
+    public void decrementDegree() {
+       //TODO
+    }
+
+    @Override
+    public void setKey(int newKey) {
+        //TODO
     }
 
     /**
-     * Add the root of the BinomialTree provided it has the right size.
-     * <p>
-     * //TODO increment degree of the root node.
+     * Add the current node to the Sibling List of the Child, increment the currentNode's degree.
      *
-     * @param newChild a binomial tree with root of the same degree as this.getDegree()
+     * @param newChild
      */
     @Override
-    public void insertChild(BinomialTree<T> newChild) {
-
+    public void addChild(FibonacciNode<T> newChild) {
+        //TODO
     }
 
+    /**
+     * Add the given FibonacciNode to the siblings list of the current Node, from the left.
+     * remember not to increase the parent's degree by mistake.
+     *
+     * Also make sure that the {@Code brother}'s both right and left nodes don't point to the
+     * old left and right siblings, but the new ones.
+     *
+     * @param brother node to be inserted
+     */
     @Override
-    public void removeFromChildren(FibonacciNode son) {
-        //TODO implement this.
+    public void addSibling(FibonacciNode<T> brother) {
+        //TODO
     }
 
+    /**
+     * remove {@Code x} from the siblings list of {@Code this}, if {@Code this == x} just set the parent to point
+     * to next sibling, and dereference this from left and right.
+     *
+     * @param x sibling to be removed from this.
+     */
     @Override
-    public Iterable<? extends FibonacciNode<T>> getChildren() {
-        //TODO implement this.
+    public void removeSibling(FibonacciNode<T> x) {
+        //TODO
+    }
+
+    /**
+     * Swap {@Code this} and {@Code x}'s positions in the circular linked list by doing this.right = x.right
+     * and this.left = x.left
+     *
+     * @param x
+     */
+    @Override
+    public void swapWith(FibonacciNode<T> x) {
+        //TODO
+    }
+
+
+    /**
+     * return {@Code} this with its' bot right and left siblings equal to itself. i.e. this is a root of a
+     * tree with no siblings.
+     * @return
+     */
+    @Override
+    public FibonacciNode<T> asOnlyChild() {
         return null;
     }
+
+    //----------------------------------------------------------------------
+
+    /**
+     * Neat feature to simplify ConcreteFibonacciHeap and make it more readable
+     *
+     * @return
+     */
+    public Iterable<? extends FibonacciNode<T>> getSiblings() {
+        return new Iterable<FibonacciNode<T>>() {
+            @Override
+            public Iterator<FibonacciNode<T>> iterator() {
+                return new NodeIterator<T> (LinkListNode.this);
+            }
+        };
+    }
+
+
+
 }

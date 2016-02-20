@@ -1,6 +1,6 @@
 package uk.ac.cam.cl.algorithms.sup5;
 
-import java.util.List;
+import java.util.Iterator;
 
 /**
  * Created by app on 17/02/16.
@@ -8,36 +8,61 @@ import java.util.List;
  * Project ${PROJECT-NAME}
  */
 public interface FibonacciNode<T> {
-    void addChild(FibonacciNode<T> newChild);//TODO remember to increment the degree of the child
-    void addSibling(FibonacciNode<T> brother); //TODO add to the left of this
-    void setParent(FibonacciNode<T> newParent);
 
-    FibonacciNode<T> getRight();
-    FibonacciNode<T> getLeft();
-    FibonacciNode<T> getParent();
-    FibonacciNode<T> getChild();
-
-    int getKey();
-    void setKey(int newKey);
-
-    boolean isMarked();
-    int getDegree();
-    void incrementDegree();//this.degree ++
-    void decrementDegree();//this.degree --
-    void setMarked(boolean newState);
+    //--------------------------------
+    //Getters
+    FibonacciNode<T>    getRight();
+    FibonacciNode<T>    getLeft();
+    FibonacciNode<T>    getParent();
+    FibonacciNode<T>    getChild();
     T getPayload();
+    int getDegree();
+    int getNumberOfSiblings();
+    int getKey();
+    boolean isMarked();
+
+
+    //--------------------------------
+    //Setters
+    void setParent(FibonacciNode<T> newParent);
+    void setMarked(boolean newState);
+    void incrementDegree();//this.degree ++
+    void decrementDegree();//this.degree --void setKey(int newKey);
+    void setKey(int newKey);
+    /**
+     * Add the current node to the Sibling List of the Child, increment the currentNode's degree.
+     *
+     * @param newChild
+     */
+    void addChild(FibonacciNode<T> newChild);
 
     /**
-     * Add the root of the BinomialTree provided it has the right size.
+     * Add the given FibonacciNode to the siblings list of the current Node, from the left.
+     * remember not to increase the parent's degree by mistake.
      *
-     * //TODO increment degree of all parents.
-     *
-     * @param newChild a binomial tree with root of the same degree as this.getDegree()
+     * @param brother node to be inserted
      */
-    void insertChild (BinomialTree<T> newChild);
+    void addSibling(FibonacciNode<T> brother);
 
 
-    void removeFromChildren(FibonacciNode son);
+    /**
+     * remove {@Code x} from the siblings list of {@Code this}, if {@Code this == x} just set the parent to point
+     * to next sibling, and dereference this from left and right. 
+     * @param x sibling to be removed from this.
+     */
+    void removeSibling(FibonacciNode<T> x);
 
-    Iterable<? extends FibonacciNode<T>> getChildren();
+    /**
+     * Swap {@Code this} and {@Code x}'s positions in the circular linked list by doing this.right = x.right
+     * and this.left = x.left 
+     * 
+     * @param x
+     */
+    void swapWith(FibonacciNode<T> x);
+
+    FibonacciNode<T> asOnlyChild();
+
+    Iterable<? extends FibonacciNode<T>> getSiblings();
+
+
 }

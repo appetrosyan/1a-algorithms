@@ -1,8 +1,7 @@
 package uk.ac.cam.cl.algorithms.sup5;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
+
 
 /**
  * Created by app on 17/02/16.
@@ -11,16 +10,12 @@ import java.util.Collections;
  */
 public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
 
-    List<FibonacciNode<T>> roots = new ArrayList<>(); //TODO reimplement this in pointers
-    FibonacciNode<T> minRoot;
-    int nodes = 0;  //TODO replace with roots.getSize()
-
-    //TODO redistribute work.
-
-
+    private final static double GOLDEN_RATIO = (1+Math.sqrt(5))/2;
+    private FibonacciNode<T> minRoot;
+    private int nodes; //Amount of Nodes currently present in the FibHeap, will need this
 
     /**
-     * To be Done By ***
+     * To be Done By ddt
      * <p>
      * Non-destructively retrieve the minimum value in the Fibonacci Heap.
      *
@@ -32,7 +27,7 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
     }
 
     /**
-     * To be done by ***
+     * To be done by ddt
      * <p>
      * Insert the value into the fibHeap
      *
@@ -40,10 +35,12 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
      */
     @Override
     public void insert(T newValue) {
-            //TODO
+        //TODO
     }
 
     /**
+     * To be completed by ddt
+     *
      * Should Perform the merge of the two fibHeaps. By reducing the amount of binomial trees in the \
      * heap to one tree per type.
      *
@@ -61,7 +58,7 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
     //-------------------------------------------------------------------------------------------------
 
     /**
-     * To be Done by ***
+     * To be Done by ap886
      * <p>
      * Destructively retrieve the minimum value in the Fibonacci heap. Perfroming the Tidy-Up procedure.
      *
@@ -69,55 +66,54 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
      */
     @Override
     public T extractMin() {
-        if(this.minRoot != null){
-            for(FibonacciNode<T> x : minRoot.getChildren()){ //TODO implement iterator
-                roots.add(x);
-                x.setParent(null);
-            }
-            if(roots.size() == 1){//E.g. completely traversed the cycle.
-                minRoot = null;
-            }else{
-                minRoot = minRoot.getRight();//TODO find new Min inside Consolidate()
-                nodes--;
-            }
-            T result = minRoot.getPayload();
-            return result;
+        for(FibonacciNode<T> x : minRoot.getChild().getSiblings()){
+            minRoot.addSibling(x);
+            x.setParent(null);
+        }
+        if(minRoot.getNumberOfSiblings() == 1){
+            minRoot = null;
         }else{
-            return null;
+            FibonacciNode<T> oldMin =minRoot;
+            minRoot = minRoot.getRight();
+            minRoot.removeSibling(oldMin);
+            consolidate();
+            nodes--;
         }
 
+        return minRoot != null ? minRoot.getPayload() : null;
     }
 
     /**
-     * Perform Consolidate as specified in the CLRS. page 516
+     * Performs Consolidate as specified in the CLRS. page 516
      */
     private void consolidate () {
         ArrayList<FibonacciNode<T>> array = new ArrayList<>(getMaxDegree());
-        for (FibonacciNode<T> x : roots) {
+        //Merge the trees in the Root List.
+        for (FibonacciNode<T> x : minRoot.getSiblings()) {
             int d = x.getDegree();
-            while(array.get(d)!=null){
-                FibonacciNode y = array.get(d);
-                if(x.getKey() > y.getKey()){
-                    Collections.swap(
-                            roots, roots.indexOf(x), roots.indexOf(y)
-                    );
-                    roots.remove(y);
-                    x.addChild(y);
-                    y.setMarked(false);
-                    array.set(d, null);
-                    d++;
+            while (array.get(d) != null) {
+                FibonacciNode<T> y = array.get(d);
+                if (x.getKey() > y.getKey()) {
+                    y.swapWith(x);
                 }
-                array.set(d,x);
-                minRoot = null;
+                minRoot.removeSibling(y);
+                x.addChild(y);
+                y.setMarked(false);
+                array.set(d, null);
+                d++;
             }
+            array.set(d, x);
         }
+        minRoot = null;
+
+        //Find the new MinRoot
         for (int i = 0; i < getMaxDegree(); i++) {
             if(array.get(i)!=null){
                 if(minRoot==null){
-                    roots = new ArrayList<> ();
-                    roots.add(array.get(i));
+                    minRoot = array.get(i).asOnlyChild();
+                    minRoot.setParent(null);
                 }else{
-                    roots.add(array.get(i));
+                    minRoot.addSibling(array.get(i));
                     if(array.get(i).getKey() < minRoot.getKey()){
                         minRoot = array.get(i);
                     }
@@ -126,8 +122,13 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
         }
     }
 
+    /**
+     *
+     * @return an upper bound on the current FibHeap's subtrees' maximal degree.
+     */
     private int getMaxDegree() {
-        return nodes;//TODO calculate a tighter upper bound
+        //See CLRS Section 19.4 for a derivation.
+        return (int) Math.floor(Math.log(nodes)/Math.log(GOLDEN_RATIO));
     }
 
 
@@ -152,13 +153,22 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
         }
     }
 
-    public void cut(FibonacciNode son, FibonacciNode dad){
-        dad.removeFromChildren(son);
+    /**
+     *
+     * @param son Node to be removed
+     * @param dad Node's parent (optional, could've just called getParent(), here provided for readability of above code
+     */
+    public void cut(FibonacciNode<T> son, FibonacciNode<T> dad){
+        dad.getChild().removeSibling(son);
         dad.decrementDegree();
-        roots.add(son);
+        minRoot.addSibling(son);
         son.setMarked(false);
     }
 
+    /**
+     *
+     * @param parent perform cascading cut from the current node.
+     */
     public void cascadingCut(FibonacciNode<T> parent){
         FibonacciNode<T> grandParent = parent.getParent();
         if(grandParent!=null){
@@ -167,18 +177,18 @@ public class ConcreteFibonacciHeap <T> implements FibonacciHeap<T> {
                 cut(parent,grandParent);
                 cascadingCut(grandParent);
             }
-        }//else do nothing, the root node cannot be cut even if it's marked.
+        }
     }
 
     /**
-     * Highly optional. Wrap to decrease key to minus infinity and extract min.
+     * Wrap to decrease key to minus infinity and extract min.
      *
-     * @param element
+     * @param element element to be removed from the heap.
      */
     @Override
     public void delete(FibonacciNode<T> element)  {
         try {
-            decreaseKey(element, 1<<31); //Assuem we're dealing with a two's complement, make very negative
+            decreaseKey(element, 1<<31); //Assume we're dealing with a two's complement, make very negative
         }catch (TriedToIncreaseKeyException error){
             error.printStackTrace();
         }
